@@ -1,18 +1,22 @@
-import React, { useContext, useState } from "react";
+import React, { useContext } from "react";
 import { GameContext } from "../../contexts/GameContext";
 
 function ClickerButton() {
-  const { money, setMoney, totalBonuses, currentVenue } =
-    useContext(GameContext);
+  const { money, setMoney, totalBonuses } = useContext(GameContext);
 
   const handleClick = () => {
     setMoney(money + 1 * totalBonuses.incomeMultiplier);
   };
 
   return (
-    <div>
-      <button onClick={handleClick}>Click Me!</button>
-      <p>${parseInt(money)}.00</p>
+    <div className="text-center mt-6">
+      <button
+        className="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+        onClick={handleClick}
+      >
+        Click Me!
+      </button>
+      <p className="mt-4 text-lg">Money: ${parseInt(money)}.00</p>
     </div>
   );
 }

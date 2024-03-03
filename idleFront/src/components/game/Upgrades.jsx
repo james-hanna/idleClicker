@@ -56,20 +56,21 @@ function Upgrades() {
   const nextVenue = getNextVenue();
 
   return (
-    <div>
-      <h2>Upgrades</h2>
-      <p>Available Money: ${parseInt(money)}</p>
+    <div className="mt-8">
+      <h2 className="text-2xl font-semibold mb-4">Upgrades</h2>
       {Object.entries(upgradesData.venues[currentVenue].games)
         .filter(([gameName]) => unlockedGames[gameName])
         .map(([gameName, upgradesList]) => {
           const nextUpgrade = getNextUpgrade(gameName, upgradesList);
           if (!nextUpgrade) return null;
           return (
-            <div key={gameName}>
-              <h3>
+            <div key={gameName} className="mb-4">
+              <div className="font-bold">{gameName}</div>
+              <h3 className="font-bold">
                 {nextUpgrade.name} - Cost: ${nextUpgrade.cost}
               </h3>
               <button
+                className="mt-2 px-4 py-2 bg-blue-500 hover:bg-blue-700 text-white font-bold rounded disabled:opacity-50"
                 disabled={money < nextUpgrade.cost}
                 onClick={() => purchaseUpgrade("games", gameName, nextUpgrade)}
               >
@@ -79,8 +80,9 @@ function Upgrades() {
           );
         })}
       {allUpgradesPurchased && nextVenue && (
-        <div>
+        <div className="mt-4">
           <button
+            className="px-4 py-2 bg-green-500 hover:bg-green-700 text-white font-bold rounded disabled:opacity-50"
             disabled={
               money < upgradesData.venues[currentVenue].unlockNextVenueCost
             }

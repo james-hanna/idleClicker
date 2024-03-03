@@ -3,7 +3,7 @@ import upgradesData from "../data/upgradesData";
 export const GameContext = createContext();
 
 export const GameProvider = ({ children }) => {
-  const [money, setMoney] = useState(155000);
+  const [money, setMoney] = useState(500);
   const [currentVenue, setCurrentVenue] = useState(1);
   const [unlockedGames, setUnlockedGames] = useState({
     blackjack: true,
@@ -57,7 +57,7 @@ export const GameProvider = ({ children }) => {
       (acc, category) => {
         Object.values(category).forEach((upgrade) => {
           acc.visitorRate += upgrade.bonuses.visitorRate;
-          acc.idleIncomeRate += upgrade.bonuses.idleIncomeRate;
+          acc.idleIncomeRate += upgrade.bonuses.idleIncomeRate * currentVenue;
           acc.incomeMultiplier *= 1 + upgrade.bonuses.incomeMultiplier;
         });
         return acc;
@@ -67,6 +67,15 @@ export const GameProvider = ({ children }) => {
 
     setTotalBonuses(newTotalBonuses);
   }, [upgrades]);
+
+  //idle income
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setMoney((prevMoney) => (prevMoney += 1 * totalBonuses.idleIncomeRate));
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [totalBonuses]);
 
   const getNextVenue = () => {
     const venueKeys = Object.keys(upgradesData.venues).map(Number);
@@ -88,6 +97,7 @@ export const GameProvider = ({ children }) => {
       const currentUpgradeLevel = upgrades.games[gameName]?.level || 0;
       return currentUpgradeLevel >= maxUpgradeLevel;
     });
+    console.log(allUpgradesPurchased);
     if (
       allUpgradesPurchased &&
       getNextVenue() !== null &&
