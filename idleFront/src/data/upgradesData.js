@@ -179,7 +179,7 @@ const upgradesData = {
       games: {
         slots: [
           {
-            level: 1,
+            level: 6,
             name: "Compact Slot Machine",
             cost: 3000,
             incomeMultiplier: 1.6,
@@ -187,7 +187,7 @@ const upgradesData = {
             idleIncomeRate: 1,
           },
           {
-            level: 2,
+            level: 7,
             name: "Multi-Game Slot Machine",
             cost: 3500,
             incomeMultiplier: 1.7,
@@ -195,7 +195,7 @@ const upgradesData = {
             idleIncomeRate: 1,
           },
           {
-            level: 3,
+            level: 8,
             name: "Virtual Reality Slot Machine",
             cost: 4000,
             incomeMultiplier: 1.8,
@@ -203,7 +203,7 @@ const upgradesData = {
             idleIncomeRate: 1,
           },
           {
-            level: 4,
+            level: 9,
             name: "AI-Powered Slot Machine",
             cost: 4500,
             incomeMultiplier: 1.9,
@@ -211,7 +211,7 @@ const upgradesData = {
             idleIncomeRate: 1,
           },
           {
-            level: 5,
+            level: 10,
             name: "Holographic Slot Machine",
             cost: 5000,
             incomeMultiplier: 2.0,
@@ -221,7 +221,7 @@ const upgradesData = {
         ],
         blackjack: [
           {
-            level: 1,
+            level: 6,
             name: "Portable Blackjack Table",
             cost: 3000,
             incomeMultiplier: 1.6,
@@ -229,7 +229,7 @@ const upgradesData = {
             idleIncomeRate: 1,
           },
           {
-            level: 2,
+            level: 7,
             name: "Round Blackjack Table",
             cost: 3500,
             incomeMultiplier: 1.7,
@@ -237,7 +237,7 @@ const upgradesData = {
             idleIncomeRate: 1,
           },
           {
-            level: 3,
+            level: 8,
             name: "Oval Blackjack Table",
             cost: 4000,
             incomeMultiplier: 1.8,
@@ -245,7 +245,7 @@ const upgradesData = {
             idleIncomeRate: 1,
           },
           {
-            level: 4,
+            level: 9,
             name: "Futuristic Blackjack Table",
             cost: 4500,
             incomeMultiplier: 1.9,
@@ -253,7 +253,7 @@ const upgradesData = {
             idleIncomeRate: 1,
           },
           {
-            level: 5,
+            level: 10,
             name: "Holographic Blackjack Table",
             cost: 5000,
             incomeMultiplier: 2.0,
@@ -265,7 +265,7 @@ const upgradesData = {
       furniture: {
         chairs: [
           {
-            level: 1,
+            level: 6,
             name: "Ergonomic Gaming Chairs",
             cost: 1200,
             incomeMultiplier: 1.3,
@@ -273,7 +273,7 @@ const upgradesData = {
             idleIncomeRate: 1,
           },
           {
-            level: 2,
+            level: 7,
             name: "Designer Chairs",
             cost: 1400,
             incomeMultiplier: 1.35,
@@ -281,7 +281,7 @@ const upgradesData = {
             idleIncomeRate: 1,
           },
           {
-            level: 3,
+            level: 8,
             name: "Themed Casino Chairs",
             cost: 1600,
             incomeMultiplier: 1.4,
@@ -289,7 +289,7 @@ const upgradesData = {
             idleIncomeRate: 1,
           },
           {
-            level: 4,
+            level: 9,
             name: "Smart Chairs with Adjustments",
             cost: 1800,
             incomeMultiplier: 1.45,
@@ -297,7 +297,7 @@ const upgradesData = {
             idleIncomeRate: 1,
           },
           {
-            level: 5,
+            level: 10,
             name: "Hologram Projecting Chairs",
             cost: 2000,
             incomeMultiplier: 1.5,
@@ -307,7 +307,7 @@ const upgradesData = {
         ],
         tables: [
           {
-            level: 1,
+            level: 6,
             name: "Convertible Gaming Tables",
             cost: 1300,
             incomeMultiplier: 1.3,
@@ -315,7 +315,7 @@ const upgradesData = {
             idleIncomeRate: 1,
           },
           {
-            level: 2,
+            level: 7,
             name: "Interactive Gaming Tables",
             cost: 1600,
             incomeMultiplier: 1.35,
@@ -323,7 +323,7 @@ const upgradesData = {
             idleIncomeRate: 1,
           },
           {
-            level: 3,
+            level: 8,
             name: "Augmented Reality Gaming Tables",
             cost: 1900,
             incomeMultiplier: 1.4,
@@ -331,7 +331,7 @@ const upgradesData = {
             idleIncomeRate: 1,
           },
           {
-            level: 4,
+            level: 9,
             name: "Smart Gaming Tables",
             cost: 2200,
             incomeMultiplier: 1.45,
@@ -339,7 +339,7 @@ const upgradesData = {
             idleIncomeRate: 1,
           },
           {
-            level: 5,
+            level: 10,
             name: "Holographic Gaming Tables",
             cost: 2500,
             incomeMultiplier: 1.5,

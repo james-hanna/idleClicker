@@ -3,14 +3,14 @@ import upgradesData from "../data/upgradesData";
 export const GameContext = createContext();
 
 export const GameProvider = ({ children }) => {
-  const [money, setMoney] = useState(1000);
+  const [money, setMoney] = useState(155000);
   const [currentVenue, setCurrentVenue] = useState(1);
   const [unlockedGames, setUnlockedGames] = useState({
-    craps: false,
-    slots: true,
     blackjack: true,
+    craps: false,
     poker: false,
     roulette: false,
+    slots: true,
   });
   const [upgrades, setUpgrades] = useState({
     games: {
@@ -72,31 +72,31 @@ export const GameProvider = ({ children }) => {
     const venueKeys = Object.keys(upgradesData.venues).map(Number);
     const currentVenueIndex = venueKeys.indexOf(currentVenue);
     const nextVenueIndex = currentVenueIndex + 1;
-
-    // check if there is a next venue
     if (nextVenueIndex < venueKeys.length) {
-      return venueKeys[nextVenueIndex]; // return next venue key
+      return venueKeys[nextVenueIndex];
     }
     return null; //if no next venue
   };
 
-  // Function to unlock the next venue
   const unlockNextVenue = () => {
-    const allUpgradesPurchased = Object.values(
+    const allUpgradesPurchased = Object.entries(
       upgradesData.venues[currentVenue].games
-    )
-      .flatMap((game) => game)
-      .every(
-        (upgrade) => upgrade.level <= (upgrades.games[upgrade.name]?.level || 0)
+    ).every(([gameName, gameUpgrades]) => {
+      const maxUpgradeLevel = Math.max(
+        ...gameUpgrades.map((upgrade) => upgrade.level)
       );
+      const currentUpgradeLevel = upgrades.games[gameName]?.level || 0;
+      return currentUpgradeLevel >= maxUpgradeLevel;
+    });
     if (
       allUpgradesPurchased &&
       getNextVenue() !== null &&
       money >= upgradesData.venues[currentVenue].unlockNextVenueCost
     ) {
-      const nextVenue = currentVenue + 1;
+      const nextVenue = getNextVenue();
       setMoney(money - upgradesData.venues[currentVenue].unlockNextVenueCost);
       setCurrentVenue(nextVenue);
+      console.log("New currentVenue:", nextVenue);
     }
   };
 
@@ -110,6 +110,7 @@ export const GameProvider = ({ children }) => {
         unlockedGames,
         upgrades,
         setUpgrades,
+        getNextVenue,
         unlockNextVenue,
       }}
     >

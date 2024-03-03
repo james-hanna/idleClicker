@@ -10,6 +10,8 @@ function Upgrades() {
     upgrades,
     setMoney,
     setUpgrades,
+    getNextVenue,
+    unlockNextVenue,
   } = useContext(GameContext);
 
   const purchaseUpgrade = (category, gameName, upgrade) => {
@@ -41,6 +43,18 @@ function Upgrades() {
     return upgradesList.find((upgrade) => upgrade.level === currentLevel + 1);
   };
 
+  const allUpgradesPurchased = Object.entries(
+    upgradesData.venues[currentVenue].games
+  )
+    .flatMap(([gameName, upgradesList]) => {
+      if (!unlockedGames[gameName]) return [];
+      const nextUpgrade = getNextUpgrade(gameName, upgradesList);
+      return nextUpgrade ? [false] : [true];
+    })
+    .every(Boolean);
+
+  const nextVenue = getNextVenue();
+
   return (
     <div>
       <h2>Upgrades</h2>
@@ -64,6 +78,19 @@ function Upgrades() {
             </div>
           );
         })}
+      {allUpgradesPurchased && nextVenue && (
+        <div>
+          <button
+            disabled={
+              money < upgradesData.venues[currentVenue].unlockNextVenueCost
+            }
+            onClick={unlockNextVenue}
+          >
+            Unlock Next Venue - Cost: $
+            {upgradesData.venues[currentVenue].unlockNextVenueCost}
+          </button>
+        </div>
+      )}
     </div>
   );
 }
