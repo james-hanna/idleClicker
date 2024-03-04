@@ -1,8 +1,8 @@
 import React, { useContext } from "react";
 import ClickerButton from "./components/game/ClickerButton";
 import Upgrades from "./components/game/Upgrades";
-import slum from "./assets/images/slum.webp";
-import rooftop from "./assets/images/rooftop.webp";
+import slum from "./assets/images/slum.png";
+import rooftop from "./assets/images/rooftop.png";
 import { GameContext } from "./contexts/GameContext";
 
 function App() {
@@ -14,7 +14,10 @@ function App() {
         <h1 className="text-4xl font-bold">Casino Tycoon</h1>
       </header>
       <main className="flex flex-col items-center justify-center">
-        <img src={currentVenue === 1 ? slum : rooftop} />
+        <img
+          src={currentVenue === 1 ? slum : rooftop}
+          className="max-h-[50vh]"
+        />
         <ClickerButton />
         <Upgrades />
       </main>
