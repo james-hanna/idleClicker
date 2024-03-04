@@ -14,33 +14,41 @@ function Upgrades() {
     unlockNextVenue,
   } = useContext(GameContext);
 
-  const purchaseUpgrade = (category, gameName, upgrade) => {
+  const purchaseUpgrade = (gameName, upgrade) => {
+    console.log(gameName);
+    console.log(upgrade);
     setMoney(money - upgrade.cost);
-    setUpgrades((prev) => ({
-      ...prev,
-      [category]: {
-        ...prev[category],
-        [gameName]: {
-          level: upgrade.level,
-          bonuses: {
-            visitorRate:
-              upgrade.visitorRate ||
-              prev[category][gameName].bonuses.visitorRate,
-            idleIncomeRate:
-              upgrade.idleIncomeRate ||
-              prev[category][gameName].bonuses.idleIncomeRate,
-            incomeMultiplier:
-              upgrade.incomeMultiplier ||
-              prev[category][gameName].bonuses.incomeMultiplier,
-          },
+    setUpgrades((prev) => {
+      const currentGameData = prev.games[gameName];
+      const updatedGameData = {
+        ...currentGameData,
+        level: upgrade.level,
+        bonuses: {
+          visitorRate:
+            upgrade.visitorRate || currentGameData.bonuses.visitorRate,
+          idleIncomeRate:
+            upgrade.idleIncomeRate || currentGameData.bonuses.idleIncomeRate,
+          incomeMultiplier:
+            upgrade.incomeMultiplier ||
+            currentGameData.bonuses.incomeMultiplier,
         },
-      },
-    }));
+      };
+
+      return {
+        ...prev,
+        games: {
+          ...prev.games,
+          [gameName]: updatedGameData,
+        },
+      };
+    });
   };
 
   const getNextUpgrade = (gameName, upgradesList) => {
     const currentLevel = upgrades.games[gameName]?.level || 0;
-    return upgradesList.find((upgrade) => upgrade.level === currentLevel + 1);
+    return upgradesList.bonuses.find(
+      (upgrade) => upgrade.level === currentLevel + 1
+    );
   };
 
   const allUpgradesPurchased = Object.entries(
@@ -56,12 +64,12 @@ function Upgrades() {
   const nextVenue = getNextVenue();
 
   return (
-    <div className="mt-8">
+    <div>
       <h2 className="text-2xl font-semibold mb-4">Upgrades</h2>
       {Object.entries(upgradesData.venues[currentVenue].games)
         .filter(([gameName]) => unlockedGames[gameName])
-        .map(([gameName, upgradesList]) => {
-          const nextUpgrade = getNextUpgrade(gameName, upgradesList);
+        .map(([gameName, gameData]) => {
+          const nextUpgrade = getNextUpgrade(gameName, gameData);
           if (!nextUpgrade) return null;
           return (
             <div key={gameName} className="mb-4">
@@ -72,13 +80,14 @@ function Upgrades() {
               <button
                 className="mt-2 px-4 py-2 bg-blue-500 hover:bg-blue-700 text-white font-bold rounded disabled:opacity-50"
                 disabled={money < nextUpgrade.cost}
-                onClick={() => purchaseUpgrade("games", gameName, nextUpgrade)}
+                onClick={() => purchaseUpgrade(gameName, nextUpgrade)}
               >
                 Purchase
               </button>
             </div>
           );
         })}
+
       {allUpgradesPurchased && nextVenue && (
         <div className="mt-4">
           <button

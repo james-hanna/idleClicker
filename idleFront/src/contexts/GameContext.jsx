@@ -3,10 +3,10 @@ import upgradesData from "../data/upgradesData";
 export const GameContext = createContext();
 
 export const GameProvider = ({ children }) => {
-  const [money, setMoney] = useState(500);
+  const [money, setMoney] = useState(1);
   const [currentVenue, setCurrentVenue] = useState(1);
   const [unlockedGames, setUnlockedGames] = useState({
-    blackjack: true,
+    blackjack: false,
     craps: false,
     poker: false,
     roulette: false,
@@ -17,22 +17,52 @@ export const GameProvider = ({ children }) => {
       craps: {
         level: 0,
         bonuses: { visitorRate: 0, idleIncomeRate: 0, incomeMultiplier: 0 },
+        tables: {
+          purchased: [],
+          visitorRate: 0,
+          idleIncomeRate: 0,
+          incomeMultiplier: 0,
+        },
       },
       slots: {
         level: 0,
         bonuses: { visitorRate: 0, idleIncomeRate: 0, incomeMultiplier: 0 },
+        tables: {
+          purchased: [],
+          visitorRate: 0,
+          idleIncomeRate: 0,
+          incomeMultiplier: 0,
+        },
       },
       blackjack: {
         level: 0,
         bonuses: { visitorRate: 0, idleIncomeRate: 0, incomeMultiplier: 0 },
+        tables: {
+          purchased: [],
+          visitorRate: 0,
+          idleIncomeRate: 0,
+          incomeMultiplier: 0,
+        },
       },
       poker: {
         level: 0,
         bonuses: { visitorRate: 0, idleIncomeRate: 0, incomeMultiplier: 0 },
+        tables: {
+          purchased: [],
+          visitorRate: 0,
+          idleIncomeRate: 0,
+          incomeMultiplier: 0,
+        },
       },
       roulette: {
         level: 0,
         bonuses: { visitorRate: 0, idleIncomeRate: 0, incomeMultiplier: 0 },
+        tables: {
+          purchased: [],
+          visitorRate: 0,
+          idleIncomeRate: 0,
+          incomeMultiplier: 0,
+        },
       },
     },
     furniture: {
@@ -40,38 +70,43 @@ export const GameProvider = ({ children }) => {
         level: 0,
         bonuses: { visitorRate: 0, idleIncomeRate: 0, incomeMultiplier: 0 },
       },
-      tables: {
+      artwork: {
         level: 0,
         bonuses: { visitorRate: 0, idleIncomeRate: 0, incomeMultiplier: 0 },
       },
     },
   });
+
   const [totalBonuses, setTotalBonuses] = useState({
     visitorRate: 1,
     idleIncomeRate: 1,
     incomeMultiplier: 1,
   });
   useEffect(() => {
-    // get total bonuses
-    const newTotalBonuses = Object.values(upgrades).reduce(
-      (acc, category) => {
-        Object.values(category).forEach((upgrade) => {
-          acc.visitorRate += upgrade.bonuses.visitorRate;
-          acc.idleIncomeRate += upgrade.bonuses.idleIncomeRate * currentVenue;
-          acc.incomeMultiplier *= 1 + upgrade.bonuses.incomeMultiplier;
-        });
+    const newTotalBonuses = Object.values(upgrades.games).reduce(
+      (acc, game) => {
+        acc.visitorRate += game.bonuses.visitorRate;
+        acc.idleIncomeRate += game.bonuses.idleIncomeRate;
+        acc.incomeMultiplier *= 1 + game.bonuses.incomeMultiplier + game.level;
+
+        if (game.tables.purchased.length > 0) {
+          acc.visitorRate += game.tables.visitorRate;
+          acc.idleIncomeRate += game.tables.idleIncomeRate;
+          acc.incomeMultiplier *= 1 + game.tables.incomeMultiplier;
+        }
+
         return acc;
       },
-      { visitorRate: 0, idleIncomeRate: 0, incomeMultiplier: 1 }
+      { visitorRate: 1, idleIncomeRate: 1, incomeMultiplier: 1 }
     );
 
     setTotalBonuses(newTotalBonuses);
-  }, [upgrades]);
+  }, [upgrades, currentVenue]);
 
   //idle income
   useEffect(() => {
     const interval = setInterval(() => {
-      setMoney((prevMoney) => (prevMoney += 1 * totalBonuses.idleIncomeRate));
+      setMoney((prevMoney) => prevMoney + totalBonuses.idleIncomeRate);
     }, 1000);
 
     return () => clearInterval(interval);
@@ -90,23 +125,33 @@ export const GameProvider = ({ children }) => {
   const unlockNextVenue = () => {
     const allUpgradesPurchased = Object.entries(
       upgradesData.venues[currentVenue].games
-    ).every(([gameName, gameUpgrades]) => {
+    ).every(([gameName, gameData]) => {
+      const gameBonuses = gameData.bonuses || [];
       const maxUpgradeLevel = Math.max(
-        ...gameUpgrades.map((upgrade) => upgrade.level)
+        ...gameBonuses.map((bonus) => bonus.level)
       );
       const currentUpgradeLevel = upgrades.games[gameName]?.level || 0;
       return currentUpgradeLevel >= maxUpgradeLevel;
     });
-    console.log(allUpgradesPurchased);
+
     if (
       allUpgradesPurchased &&
       getNextVenue() !== null &&
       money >= upgradesData.venues[currentVenue].unlockNextVenueCost
     ) {
+      setMoney(
+        (prevMoney) =>
+          prevMoney - upgradesData.venues[currentVenue].unlockNextVenueCost
+      );
+      const nextGame = upgradesData.venues[currentVenue]?.nextGameUnlocked;
+      if (nextGame) {
+        setUnlockedGames((prev) => ({
+          ...prev,
+          [nextGame]: true,
+        }));
+      }
       const nextVenue = getNextVenue();
-      setMoney(money - upgradesData.venues[currentVenue].unlockNextVenueCost);
       setCurrentVenue(nextVenue);
-      console.log("New currentVenue:", nextVenue);
     }
   };
 

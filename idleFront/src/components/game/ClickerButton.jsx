@@ -2,9 +2,10 @@ import React, { useContext } from "react";
 import { GameContext } from "../../contexts/GameContext";
 
 function ClickerButton() {
-  const { money, setMoney, totalBonuses } = useContext(GameContext);
+  const { money, setMoney, totalBonuses, upgrades } = useContext(GameContext);
 
   const handleClick = () => {
+    console.log(totalBonuses);
     setMoney(money + 1 * totalBonuses.incomeMultiplier);
   };
 
